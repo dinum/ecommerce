@@ -10,11 +10,10 @@
   <title>Election Commission of Sri Lanka</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="<?php echo base_url(); ?>assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="<?php echo base_url(); ?>assets/css/shop-item.css" rel="stylesheet">
-  <link rel="icon" href="<?php echo base_url(); ?>assets/image/symbole.png" sizes="192x192" />
 
     <style>
       .bd-placeholder-img {

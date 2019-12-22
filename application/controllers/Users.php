@@ -4,8 +4,13 @@
  * Login Controller
  */
 class Users extends CI_Controller {
+    public $permissions;
+
     public function __construct() {
         parent::__construct();
+        if($this->session->userdata('user_logged')){
+            $this->permissions = $this->session->userdata('permissions');
+        }
         if (!$this->session->userdata('user_logged')) {
             redirect(base_url().'login/11');
         }
@@ -138,8 +143,7 @@ class Users extends CI_Controller {
     }
     
     public function loadHeader(){
-        $this->load->view('template/header');
-        $this->load->view('template/leftmenu');
+       $this->load->view('template/header',array('permissions'=>$this->permissions));
     }
       
     public function loadFooter(){

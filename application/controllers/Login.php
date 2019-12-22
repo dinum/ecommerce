@@ -107,10 +107,10 @@ class Login extends CI_Controller {
     }
     
     public function loadHeader(){
-        $this->load->view('template/header_full');
+        $this->load->view('template/header');
     }
       
     public function loadFooter(){
-        $this->load->view('template/footer_full');
+        $this->load->view('template/footer');
     }
 }

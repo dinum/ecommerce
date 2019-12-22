@@ -1,4 +1,5 @@
-<div class="card mt-4">
+<section class="post-area section-gap">
+<div class="card width50">
     <div class="card-header">
         <h4 class="pull-left">Add User Role</h4>
     </div> 
@@ -36,3 +37,4 @@
         <?php echo form_close(); ?>
     </div>
 </div>
+</section>

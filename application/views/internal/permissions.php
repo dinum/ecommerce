@@ -1,4 +1,5 @@
-<div class="card card-outline-secondary my-4">
+<section class="post-area section-gap">
+<div class="card card-outline-secondary width50">
     <div class="card-header">
         <h4 class="pull-left">Permissions</h4><a href="<?php echo base_url(); ?>permissions/add" class="btn btn-info btn-small pull-right" ><i class="fa fa-plus"></i>&nbsp;Add Permission</a>
     </div>      
@@ -13,3 +14,4 @@
         </ul>
     </div>
 </div>
+</section>

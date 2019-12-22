@@ -1,4 +1,5 @@
-<div class="card card-outline-secondary my-4">
+<section class="post-area section-gap">
+<div class="card card-outline-secondary width50">
     <div class="card-header">
         <h4 class="pull-left">Users</h4><a href="<?php echo base_url(); ?>users/add" class="btn btn-info btn-small pull-right" ><i class="fa fa-plus"></i>&nbsp;Add User</a>
     </div>      
@@ -11,3 +12,4 @@
         </ul>
     </div>
 </div>
+</section>
