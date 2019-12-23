@@ -22,21 +22,7 @@ class Home extends CI_Controller {
         $this->load->library('validator');
     }
 
-    public function index() {
-        
-        var_dump($this->permissions);
-        
-        var_dump(array_search('add_user', $this->permissions));
-            
-            if (array_search('add_user', $this->permissions)==true) {
-                echo "yyyyyyyy";
-                
-            } else {
-                echo "xxxxx";
-            }
-            
-            die();
-        
+    public function index() {     
         $this->loadHeader();
         $this->load->view('external/home');
         $this->loadFooter();

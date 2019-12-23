@@ -58,8 +58,8 @@ class Login extends CI_Controller {
                             'user_email' => $userData[0]->email
                         );
                          
-                        $low_permission = array();
-                        $all_permissions =array();
+                        $low_permission = array('home');
+                        $all_permissions =array('home');
                         foreach ($permissions_list as $permission) {
                             if($permission->special_permission==0){
                                 array_push($low_permission,$permission->permission);
