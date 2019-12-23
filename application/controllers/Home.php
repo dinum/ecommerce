@@ -9,7 +9,9 @@ class Home extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        if($this->session->userdata('user_logged')){
+        if (!$this->session->userdata('user_logged')) {
+            redirect(base_url().'login/11');
+        } else if($this->session->userdata('user_logged')){
             $this->permissions = $this->session->userdata('permissions');
         }
         
@@ -22,7 +24,7 @@ class Home extends CI_Controller {
         $this->load->library('validator');
     }
 
-    public function index() {     
+    public function index() {
         $this->loadHeader();
         $this->load->view('external/home');
         $this->loadFooter();
@@ -69,12 +71,93 @@ class Home extends CI_Controller {
         $this->loadFooter();
     }
     
-    public function account(){
+    public function account($msgid=""){
         if (!$this->session->userdata('user_logged')) {
             redirect(base_url().'login/11');
         }
+        $errors = array();
+        $msg = "";
+        if(isset($msgid)&&$msgid != ""){
+    		$msg = $this->messages->returnMessage($msgid);
+    	} else {
+    		$msg = "";
+    	}
+        $data = array();
+        $dataDb = $this->TbluserDetails->get_by_ID($this->session->userdata('user_id'));        
+        if(isset($_POST['submitdata'])){
+            $data = array();
+            $data['fname'] = $this->common->clean_text($this->input->post('first_name'));
+            $data['mname'] = $this->common->clean_text($this->input->post('middle_name'));
+            $data['lname'] = $this->common->clean_text($this->input->post('last_name'));
+            $data['email'] = $this->common->clean_text($this->input->post('email'));
+            $data['mobile'] = $this->common->clean_text($this->input->post('mobile'));
+            $data['address'] = $this->common->clean_text($this->input->post('address'));
+            $data['qualification'] = $this->common->clean_text($this->input->post('qualification'));
+            $customerId = $this->common->clean_text($this->input->post('cid'));
+            
+            $has_error = false;
+            if(!$this->validator->validate_alpha($data['fname'])){
+                $has_error = true;
+                $errors['fname'] = $this->messages->returnMessage(12);
+                $logString = "Add User | name validation fail";
+                $this->common->enter_log_logedUser("Guest",$logString,$_POST,0);
+            }
+            
+            if(!$this->validator->validate_alpha($data['mname'])){
+                $has_error = true;
+                $errors['mname'] = $this->messages->returnMessage(12);
+                $logString = "Add User | name validation fail";
+                $this->common->enter_log_logedUser("Guest",$logString,$_POST,0);
+            }
+            
+            if(!$this->validator->validate_alpha($data['lname'])){
+                $has_error = true;
+                $errors['lname'] = $this->messages->returnMessage(12);
+                $logString = "Add User | name validation fail";
+                $this->common->enter_log_logedUser("Guest",$logString,$_POST,0);
+            }                
+                        
+            if(!$has_error){
+                $data['updated_date'] = date('Y-m-d H:i:s');
+                
+                $id = $this->TbluserDetails->update_data($data,array('id'=>$customerId));
+                
+                if($id){                    
+                    
+                    $uaccount = array(
+                        'name' => $data['fname'],
+                        'email' => $data['email']
+                    );
+                    
+                    $userid = $this->Tblusers->update_data($uaccount,array('detail_id'=>$customerId));
+                    
+                   
+                    $logString = "Updated User | Success | ID=".$id;
+                    $this->common->enter_log_logedUser($data['fname'],$logString,$_POST,$userid);
+                    redirect(base_url().'home/account/1');
+                } else {
+                    $logString = "Updated User | Database Error";
+                    $this->common->enter_log_logedUser("Guest",$logString,$_POST,0);
+                    redirect(base_url().'home/account/2');
+                }
+                
+            } else {
+                $msg = $this->messages->returnMessage(20);
+            }
+            
+            
+        } else {
+            $data['fname'] = $dataDb[0]->fname;
+            $data['mname'] = $dataDb[0]->mname;
+            $data['lname'] = $dataDb[0]->lname;
+            $data['email'] = $dataDb[0]->email;
+            $data['mobile'] = $dataDb[0]->mobile;
+            $data['address'] = $dataDb[0]->address;
+            $data['qualification'] = $dataDb[0]->qualification;
+        }        
+
         $this->loadHeader();
-        $this->load->view('internal/account');
+        $this->load->view('internal/account',array('data'=>$data,'error'=>$errors,'msg'=>$msg,'cid'=>$dataDb[0]->id));
         $this->loadFooter();
     }
     

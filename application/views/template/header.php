@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/animate.min.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/owl.carousel.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/main.css"> 
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
 
     </head>
 
@@ -50,13 +50,21 @@
                                     </ul>
                                 </li>
                                 <?php } ?>
+                                <?php if(array_search('vacancies_requests', $this->permissions)||array_search('view_vacancy', $this->permissions)||array_search('add_vacancy', $this->permissions)){ ?>
                                 <li class="menu-has-children"><a href="">Vacancies</a>
                                     <ul>
-                                        <li><a href="elements.html">Add</a></li>
-                                        <li><a href="elements.html">Requests</a></li>
-                                        <li><a href="search.html">View All</a></li>
+                                        <?php if (array_search('add_vacancy', $permissions)) { ?>
+                                        <li><a href="<?php echo base_url(); ?>vacancies/add">Add</a></li>
+                                        <?php } ?>
+                                        <?php if (array_search('vacancies_requests', $permissions)) { ?>
+                                        <li><a href="<?php echo base_url(); ?>vacancies/requests">Requests</a></li>
+                                        <?php } ?>
+                                        <?php if (array_search('view_vacancy', $permissions)) { ?>
+                                        <li><a href="<?php echo base_url(); ?>vacancies">View All</a></li>
+                                        <?php } ?>
                                     </ul>
                                 </li>
+                                <?php } ?>
                                 <li class="menu-has-children"><a href="">Hi <?php echo $this->session->userdata('user_name'); ?></a>
                                     <ul>
                                         <li><a href="<?php echo base_url(); ?>home/account">Account</a></li>

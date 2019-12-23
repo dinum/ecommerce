@@ -28,7 +28,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<script src="<?php echo base_url(); ?>assets/js/jquery.sticky.js"></script>
 			<script src="<?php echo base_url(); ?>assets/js/jquery.nice-select.min.js"></script>			
 			<script src="<?php echo base_url(); ?>assets/js/parallax.min.js"></script>		
-			<script src="<?php echo base_url(); ?>assets/js/mail-script.js"></script>	
+			<script src="<?php echo base_url(); ?>assets/js/mail-script.js"></script>
+                        <script src="<?php echo base_url(); ?>assets/js/moment-with-locales.js"></script>
+                        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
 			<script src="<?php echo base_url(); ?>assets/js/main.js"></script>	
 		</body>
 	</html>
