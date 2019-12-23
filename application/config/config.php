@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/ecommerce/';
-$config['doc_root'] = 'C:/wamp/www/ecommerce/';
+$config['doc_root'] = 'C:/wamp64/www/ecommerce/';
 
 /*
 |--------------------------------------------------------------------------

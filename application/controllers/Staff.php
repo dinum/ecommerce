@@ -29,27 +29,57 @@ class Staff extends CI_Controller {
     }
     
     public function index($msgid=""){
+        if(!array_search('view_staff', $this->permissions)){
+            redirect(base_url().'permission-denied');
+        }
         if(isset($msgid)&&$msgid != ""){
     		$msg = $this->messages->returnMessage($msgid);
     	} else {
     		$msg = "";
     	}
-            
+        $data =  $this->TbluserDetails->get_by_filter(array('status!='=>2));
         
         $this->loadHeader();
-        $this->load->view('internal/view_staff');
+        $this->load->view('internal/view_staff',array('datas'=>$data,'msg'=>$msg));
         $this->loadFooter();
     }
+
+    public function approve($id){
+        if(isset($id)&&is_numeric($id)){
+            $this->TbluserDetails->update_data(array("status"=>1,"updated_date"=>date('Y-m-d H:i:s')),array("id"=>$id));
+            $this->Tblusers->update_data(array("status"=>1),array("detail_id"=>$id));
+            redirect(base_url().'staff/requests/1');
+        } else {
+            redirect(base_url().'staff/requests/2');
+        }
+    }
+
+    public function status($id,$status){
+        if(isset($id)&&is_numeric($id)&&is_numeric($status)){
+            $this->TbluserDetails->update_data(array("status"=>$status,"updated_date"=>date('Y-m-d H:i:s')),array("id"=>$id));
+            $this->Tblusers->update_data(array("status"=>$status),array("detail_id"=>$id));
+            redirect(base_url().'staff/1');
+        } else {
+            redirect(base_url().'staff/2');
+        }
+    }
+
     
     public function requests($msgid=""){
+        $msg = "";
+        if(!array_search('staff_requests', $this->permissions)){
+            redirect(base_url().'permission-denied');
+        }
         if(isset($msgid)&&$msgid != ""){
     		$msg = $this->messages->returnMessage($msgid);
     	} else {
     		$msg = "";
     	}
         
+        $data =  $this->TbluserDetails->get_by_filter(array('status'=>2));
+
         $this->loadHeader();
-        $this->load->view('internal/request_staff');
+        $this->load->view('internal/request_staff',array('datas'=>$data,'msg'=>$msg));
         $this->loadFooter();
     }
     

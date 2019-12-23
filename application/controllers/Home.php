@@ -23,20 +23,6 @@ class Home extends CI_Controller {
     }
 
     public function index() {
-        
-        var_dump($this->permissions);
-        
-        var_dump(array_search('add_user', $this->permissions));
-            
-            if (array_search('add_user', $this->permissions)==true) {
-                echo "yyyyyyyy";
-                
-            } else {
-                echo "xxxxx";
-            }
-            
-            die();
-        
         $this->loadHeader();
         $this->load->view('external/home');
         $this->loadFooter();
@@ -87,8 +73,11 @@ class Home extends CI_Controller {
         if (!$this->session->userdata('user_logged')) {
             redirect(base_url().'login/11');
         }
+
+        $data = $this->TbluserDetails->get_by_ID($this->session->userdata('user_id'));
+
         $this->loadHeader();
-        $this->load->view('internal/account');
+        $this->load->view('internal/account',array('data'=>$data[0]));
         $this->loadFooter();
     }
     
