@@ -65,3 +65,4 @@ $route['signup'] = 'Home/signup';
 $route['signup/(:num)'] = 'Home/signup/$1';
 $route['permission-denied'] = 'Home/permission';
 $route['staff/(:num)'] = 'Staff/index/$1';
+$route['vacancies/(:num)'] = 'Vacancies/index/$1';

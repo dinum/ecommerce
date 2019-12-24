@@ -2454,6 +2454,10 @@ body.mobile-nav-active #mobile-nav-toggle {
   padding: 20px;
 }
 
+.single-post .details {
+  width: 100%;
+}
+
 .single-popular-post .details {
   margin-left: 40px;
 }
@@ -2475,9 +2479,14 @@ body.mobile-nav-active #mobile-nav-toggle {
   display: inline-block;
 }
 
+.single-post .thumb {
+  padding: 20px;
+}  
+
 .single-popular-post .thumb img {
   margin-top: 10px;
   margin-left: 5px;
+ 
 }
 
 .single-popular-post .btns {
@@ -2637,6 +2646,15 @@ body.mobile-nav-active #mobile-nav-toggle {
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
+}
+
+.post-list .single-post .btns .desable{
+  background-color: rgb(243, 243, 243);
+  cursor: default;
+}
+
+.post-list .single-post .btns .desable:hover{
+  background-color: rgb(243, 243, 243);
 }
 
 .post-list .single-post .btns li i, .post-list .single-post .btns li a {

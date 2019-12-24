@@ -9,9 +9,7 @@ class Home extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        if (!$this->session->userdata('user_logged')) {
-            redirect(base_url().'login/11');
-        } else if($this->session->userdata('user_logged')){
+        if($this->session->userdata('user_logged')){
             $this->permissions = $this->session->userdata('permissions');
         }
         
@@ -19,16 +17,102 @@ class Home extends CI_Controller {
         $this->load->model('TbluserDetails');
         $this->load->model('TblgetData');
         $this->load->model('TblUserRoles');
+        $this->load->model('TblVacancies');
+        $this->load->model('TblUserVacancies');
         $this->load->library('messages');
         $this->load->library('common');
         $this->load->library('validator');
     }
 
-    public function index() {
+    public function index($msgid="") {
+        if(isset($msgid)&&$msgid != ""){
+    		$msg = $this->messages->returnMessage($msgid);
+    	} else {
+    		$msg = "";
+        }
+        $data = $this->TblVacancies->get_by_filter(array('status'=>1),array('added_date'=>'DESC'));
+
+        $registed = array("0");
+
+        if ($this->session->userdata('user_logged')) {
+            $registeddata = $this->TblUserVacancies->get_by_filter(array('user_id'=>$this->session->userdata('user_id')));
+
+            if(isset($registeddata)&&$registeddata&&sizeof($registeddata)>0){
+                foreach($registeddata as $registedda){
+                    array_push($registed,$registedda->vacancy_id);
+                }
+            }
+        } 
+
         $this->loadHeader();
-        $this->load->view('external/home');
+        $this->load->view('external/home',array('datas'=>$data,'msg'=>$msg,"applied"=>$registed));
         $this->loadFooter();
     }
+
+    public function view_vacancy($id){
+        if (!$this->session->userdata('user_logged')) {
+            redirect(base_url().'login/11');
+        }
+        
+        $data = $this->TblVacancies->get_by_filter(array('status'=>1,'id'=>$id));
+
+        if(!isset($data[0])||empty($data[0]->id)){
+            redirect(base_url().'index/11');
+        }
+
+        $registed = array("0");
+        $registeddata = array();
+
+        if ($this->session->userdata('user_logged')) {
+            $registeddata = $this->TblUserVacancies->get_by_filter(array('user_id'=>$this->session->userdata('user_id'),'vacancy_id'=>$data[0]->id));
+
+            if(isset($registeddata)&&$registeddata&&sizeof($registeddata)>0){
+                foreach($registeddata as $registedda){
+                    array_push($registed,$registedda->vacancy_id);
+                }
+            }
+        } 
+
+        $employees = $this->TblgetData->getEmployeesByVacancy($id);
+
+        $this->loadHeader();
+        $this->load->view('external/vacancy',array('data'=>$data[0],"applied"=>$registed,'registeddata'=>$registeddata[0],'employees'=>$employees));
+        $this->loadFooter();
+
+    }
+
+    public function apply($id){
+        if (!$this->session->userdata('user_logged')) {
+            redirect(base_url().'login/11');
+        } else if(!array_search('apply_vacancy', $this->permissions)){
+            redirect(base_url().'permission-denied');
+        }
+        
+        $dataD = $this->TblVacancies->get_by_filter(array('status'=>1,'id'=>$id));
+
+        if(!isset($dataD[0])||empty($dataD[0]->id)){
+            redirect(base_url().'home/index/11');
+        }
+
+        $data = array(
+            'user_id'=> $this->session->userdata('user_id'),
+            'vacancy_id' =>$dataD[0]->id,
+            'status' => 0
+        );
+        $ins_id = $this->TblUserVacancies->insert_data($data);
+
+        if($ins_id){
+            $logString = "apply for vacancy | Success | ID=".$id;
+            $this->common->enter_log_logedUser($this->session->userdata('user_name'),$logString,$_POST,$this->session->userdata('user_id'));
+            redirect(base_url().'home/index/5');
+        } else {
+            $logString = "apply for vacancy | Error";
+            $this->common->enter_log_logedUser($this->session->userdata('user_name'),$logString,$_POST,$this->session->userdata('user_id'));
+            redirect(base_url().'home/index/6'); 
+        }
+    }
+
+
     
     public function aboutus(){
         $this->loadHeader();

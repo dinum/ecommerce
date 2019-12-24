@@ -65,12 +65,6 @@
                                     </ul>
                                 </li>
                                 <?php } ?>
-                                <li class="menu-has-children"><a href="">Hi <?php echo $this->session->userdata('user_name'); ?></a>
-                                    <ul>
-                                        <li><a href="<?php echo base_url(); ?>home/account">Account</a></li>
-                                        <li><a href="<?php echo base_url(); ?>logout">Logout</a></li>
-                                    </ul>
-                                </li>
                                 <?php if (array_search('view_users', $permissions) || array_search('add_user', $permissions)||array_search('add_user_role', $permissions) || array_search('view_user_roles', $permissions)||array_search('add_permissions', $permissions) || array_search('view_permissions', $permissions)) { ?>
                                 <li class="menu-has-children"><a href="">Settings</a>
                                     <ul>
@@ -86,6 +80,13 @@
                                     </ul>
                                 </li>
                                 <?php } ?>
+                                <li class="menu-has-children"><a href="">Hi , <?php echo $this->session->userdata('user_name'); ?></a>
+                                    <ul>
+                                        <li><a href="<?php echo base_url(); ?>home/account">Account</a></li>
+                                        <li><a href="<?php echo base_url(); ?>logout">Logout</a></li>
+                                    </ul>
+                                </li>
+                                
                             <?php } else { ?>
                                 <li><a class="ticker-btn" href="<?php echo base_url(); ?>signup">Signup</a></li>
                                 <li><a class="ticker-btn" href="<?php echo base_url(); ?>login">Login</a></li>

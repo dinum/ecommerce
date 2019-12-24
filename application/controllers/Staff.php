@@ -15,7 +15,7 @@ class Staff extends CI_Controller {
             $this->permissions = $this->session->userdata('permissions');
         }
         
-        if(!array_search('view_staff', $this->permissions)&&!array_search('staff_requests', $this->permissions)){
+        if(!array_search('view_staff', $this->permissions)&&!array_search('staff_requests', $this->permissions)&&!array_search('view_employee', $this->permissions)){
             redirect(base_url().'permission-denied');
         }
         
@@ -41,6 +41,16 @@ class Staff extends CI_Controller {
         
         $this->loadHeader();
         $this->load->view('internal/view_staff',array('datas'=>$data,'msg'=>$msg));
+        $this->loadFooter();
+    }
+
+    public function view($id){
+        if(!array_search('view_employee', $this->permissions)){
+            redirect(base_url().'permission-denied');
+        }
+        $data =  $this->TbluserDetails->get_by_ID($id);
+        $this->loadHeader();
+        $this->load->view('internal/view_employee',array('data'=>$data[0]));
         $this->loadFooter();
     }
 

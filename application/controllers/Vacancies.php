@@ -34,10 +34,69 @@ class Vacancies extends CI_Controller {
     		$msg = $this->messages->returnMessage($msgid);
     	} else {
     		$msg = "";
-    	}
+        }
+        
+        $data = $this->TblVacancies->get_all();
+
         $this->loadHeader();
-        $this->load->view('internal/view_vacancies',array('msg'=>$msg));
+        $this->load->view('internal/view_vacancies',array('msg'=>$msg,'datas'=>$data));
         $this->loadFooter();
+    }
+
+    public function approve($id){
+        if(isset($id)&&is_numeric($id)){
+            $this->TblUserVacancies->update_data(array("status"=>1),array("id"=>$id));
+            $this->sendemial($id);
+            redirect(base_url().'vacancies/requests/1');
+        } else {
+            redirect(base_url().'vacancies/requests/2');
+        }
+    }
+
+    public function reject($id){
+        //var_dump($id);
+        if(isset($id)&&is_numeric($id)){
+            $this->TblUserVacancies->update_data(array("status"=>2),array("id"=>$id));
+            redirect(base_url().'vacancies/requests/1');
+        } else {
+            redirect(base_url().'vacancies/requests/2');
+        }
+    }
+
+    public function sendemial($id){
+        $data = $this->TblgetData->getEmployeeEmail($id);
+
+        if(isset($data[0]->email)||!empty($data[0]->email)){
+            $to = $data[0]->email;
+            $email= "manager@athulaketers.lk";
+            $text= "Dear ".$data[0]->fname."\r\n We Selected you, for our  ".$data[0]->tittle."  Campaign";
+ 
+            $headers = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= "From: " . $email . "\r\n"; // Sender's E-mail
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+            $message ='<table style="width:100%">
+                <tr><td>Text: '.$text.'</td></tr>
+
+            </table>';
+
+            if (@mail($to, $email, $message, $headers))
+            {
+                $msg = '<div class="alert alert-success">The message has been sent.</div>';
+            }else{
+                $msg = '<div class="alert alert-danger">The message has been sent.</div>';
+            }
+        }
+    }
+
+
+    public function status($id,$status){
+        if(isset($id)&&is_numeric($id)&&is_numeric($status)){
+            $this->TblVacancies->update_data(array("status"=>$status,"updated_date"=>date('Y-m-d H:i:s')),array("id"=>$id));
+            redirect(base_url().'vacancies/1');
+        } else {
+            redirect(base_url().'vacancies/2');
+        }
     }
     
     public function add($msgid=""){
@@ -72,7 +131,7 @@ class Vacancies extends CI_Controller {
             
             if(!$has_error){
                 $data['added_date'] = date('Y-m-d H:i:s');
-                $data['status'] = 2;
+                $data['status'] = 1;
                 
                 $id = $this->TblVacancies->insert_data($data);
                 
@@ -112,6 +171,10 @@ class Vacancies extends CI_Controller {
     		$msg = "";
     	}
         $data = array();
+
+        
+        $data = $this->TblgetData->getPendingCUstomersList();
+
         $this->loadHeader();
         $this->load->view('internal/vacancy_request',array('datas'=>$data,'msg'=>$msg));
         $this->loadFooter();
